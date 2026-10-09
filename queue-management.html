@@ -1,0 +1,4052 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Digital Queue Management System</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Segoe UI",Arial,sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            background:#eef4f5;
+            color:#263238;
+        }
+
+        button{
+            cursor:pointer;
+        }
+
+        /* ================= LOGIN ================= */
+
+        #loginPage{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:20px;
+
+            background:
+                    radial-gradient(circle at 10% 10%,#155e75,transparent 35%),
+                    radial-gradient(circle at 90% 90%,#0f766e,transparent 35%),
+                    #061b25;
+        }
+
+        .login-wrapper{
+            width:1000px;
+            max-width:100%;
+            min-height:600px;
+
+            display:grid;
+            grid-template-columns:1fr 1fr;
+
+            background:white;
+            border-radius:26px;
+            overflow:hidden;
+
+            box-shadow:0 25px 70px rgba(0,0,0,.35);
+        }
+
+        /* LEFT */
+
+        .login-info{
+            padding:55px 45px;
+
+            background:
+                    linear-gradient(145deg,#0f766e,#164e63);
+
+            color:white;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .logo-big{
+            width:78px;
+            height:78px;
+
+            border-radius:21px;
+            background:rgba(255,255,255,.17);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:40px;
+            margin-bottom:25px;
+        }
+
+        .login-info h1{
+            font-size:36px;
+            line-height:1.15;
+            margin-bottom:17px;
+        }
+
+        .login-info p{
+            color:#d9f5f2;
+            line-height:1.7;
+        }
+
+        .features{
+            margin-top:30px;
+        }
+
+        .features div{
+            margin:14px 0;
+            font-size:15px;
+        }
+
+        /* RIGHT */
+
+        .login-form{
+            padding:45px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .login-form h2{
+            font-size:30px;
+            color:#164e63;
+            margin-bottom:6px;
+        }
+
+        .subtitle{
+            color:#78909c;
+            margin-bottom:25px;
+        }
+
+        .input-box{
+            margin-bottom:16px;
+        }
+
+        .input-box label{
+            display:block;
+            font-weight:600;
+            margin-bottom:7px;
+        }
+
+        .input-box input,
+        .input-box select{
+
+            width:100%;
+            padding:13px;
+
+            border:1px solid #ccd8dc;
+            border-radius:10px;
+
+            background:#f8fafb;
+            outline:none;
+
+            font-size:15px;
+        }
+
+        .input-box input:focus,
+        .input-box select:focus{
+            border-color:#0f766e;
+
+            box-shadow:
+                    0 0 0 3px rgba(15,118,110,.1);
+        }
+
+        .login-button{
+            width:100%;
+            padding:14px;
+
+            border:none;
+            border-radius:10px;
+
+            background:#0f766e;
+            color:white;
+
+            font-size:16px;
+            font-weight:bold;
+        }
+
+        .login-button:hover{
+            background:#115e59;
+        }
+
+        .register-button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+
+            border:1px solid #0f766e;
+            border-radius:10px;
+
+            background:white;
+            color:#0f766e;
+
+            font-weight:bold;
+        }
+
+        .register-button:hover{
+            background:#e0f2f1;
+        }
+
+        .login-message{
+            margin-top:12px;
+            text-align:center;
+            font-size:13px;
+            font-weight:600;
+            min-height:20px;
+        }
+
+        /* ================= MODAL ================= */
+
+        .modal{
+            display:none;
+
+            position:fixed;
+            z-index:5000;
+
+            left:0;
+            top:0;
+
+            width:100%;
+            height:100%;
+
+            background:rgba(0,0,0,.65);
+
+            align-items:center;
+            justify-content:center;
+
+            padding:20px;
+        }
+
+        .modal-content{
+            width:430px;
+            max-width:100%;
+
+            background:white;
+            padding:30px;
+
+            border-radius:18px;
+        }
+
+        .modal-content h2{
+            color:#164e63;
+            margin-bottom:20px;
+        }
+
+        .close-modal{
+            float:right;
+
+            border:none;
+            background:none;
+
+            font-size:25px;
+            color:#78909c;
+        }
+
+        .form-group{
+            margin-bottom:15px;
+        }
+
+        .form-group label{
+            display:block;
+            margin-bottom:7px;
+            font-weight:600;
+        }
+
+        .form-group input,
+        .form-group select{
+            width:100%;
+            padding:13px;
+
+            border:1px solid #d2dde0;
+            border-radius:9px;
+
+            outline:none;
+        }
+
+        /* ================= DASHBOARD ================= */
+
+        .dashboard{
+            display:none;
+            min-height:100vh;
+            background:#eef4f5;
+        }
+
+        /* TOPBAR */
+
+        .topbar{
+            min-height:74px;
+
+            background:white;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:12px 35px;
+
+            box-shadow:0 3px 15px rgba(0,0,0,.08);
+
+            gap:20px;
+        }
+
+        .brand{
+            display:flex;
+            align-items:center;
+            gap:12px;
+
+            font-size:19px;
+            font-weight:bold;
+            color:#164e63;
+        }
+
+        .brand-icon{
+            width:43px;
+            height:43px;
+
+            background:#0f766e;
+            color:white;
+
+            border-radius:12px;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:21px;
+        }
+
+        .topbar-right{
+            display:flex;
+            align-items:center;
+            gap:18px;
+        }
+
+        /* TIME */
+
+        .date-time{
+            text-align:right;
+        }
+
+        .live-time{
+            font-size:16px;
+            font-weight:bold;
+            color:#164e63;
+        }
+
+        .live-date{
+            color:#78909c;
+            font-size:11px;
+        }
+
+        /* NOTIFICATION */
+
+        .notification-box{
+            position:relative;
+            font-size:22px;
+            cursor:pointer;
+        }
+
+        .notification-count{
+            position:absolute;
+
+            top:-8px;
+            right:-8px;
+
+            min-width:18px;
+            height:18px;
+
+            padding:2px 5px;
+
+            border-radius:50%;
+
+            background:#e53935;
+            color:white;
+
+            font-size:10px;
+            font-weight:bold;
+
+            text-align:center;
+        }
+
+        .notification-panel{
+            display:none;
+
+            position:absolute;
+
+            right:0;
+            top:32px;
+
+            width:320px;
+
+            background:white;
+
+            border-radius:13px;
+
+            box-shadow:0 12px 35px rgba(0,0,0,.2);
+
+            z-index:3000;
+
+            overflow:hidden;
+        }
+
+        .notification-title{
+            padding:15px;
+
+            font-weight:bold;
+            color:#164e63;
+
+            border-bottom:1px solid #eeeeee;
+        }
+
+        .notification{
+            padding:13px 15px;
+
+            border-bottom:1px solid #eeeeee;
+
+            color:#455a64;
+
+            font-size:13px;
+        }
+
+        .notification small{
+            color:#90a4ae;
+        }
+
+        .no-notification{
+            padding:20px;
+
+            text-align:center;
+
+            color:#90a4ae;
+
+            font-size:13px;
+        }
+
+        /* USER */
+
+        .user-info{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .greeting{
+            color:#455a64;
+            font-weight:600;
+            font-size:14px;
+        }
+
+        .role-badge{
+            padding:6px 12px;
+
+            border-radius:20px;
+
+            background:#e0f2f1;
+            color:#00695c;
+
+            font-size:12px;
+            font-weight:bold;
+        }
+
+        .logout{
+            border:none;
+
+            background:#ffebee;
+            color:#c62828;
+
+            padding:9px 14px;
+
+            border-radius:9px;
+
+            font-weight:bold;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main{
+            max-width:1400px;
+            margin:auto;
+            padding:30px;
+        }
+
+        .heading{
+            margin-bottom:25px;
+        }
+
+        .heading h2{
+            font-size:29px;
+            color:#263238;
+        }
+
+        .heading p{
+            color:#78909c;
+            margin-top:5px;
+        }
+
+        /* ================= STATS ================= */
+
+        .stats{
+            display:grid;
+
+            grid-template-columns:repeat(4,1fr);
+
+            gap:18px;
+
+            margin-bottom:25px;
+        }
+
+        .card{
+            background:white;
+
+            border-radius:17px;
+
+            padding:23px;
+
+            box-shadow:0 5px 20px rgba(0,0,0,.06);
+        }
+
+        .stat{
+            display:flex;
+            align-items:center;
+            gap:15px;
+        }
+
+        .stat-icon{
+            width:55px;
+            height:55px;
+
+            border-radius:14px;
+
+            background:#e0f2f1;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:25px;
+        }
+
+        .stat h3{
+            font-size:25px;
+            color:#164e63;
+        }
+
+        .stat p{
+            color:#78909c;
+            font-size:13px;
+        }
+
+        /* ================= GRID ================= */
+
+        .grid-2{
+            display:grid;
+
+            grid-template-columns:1fr 1.4fr;
+
+            gap:22px;
+        }
+
+        .card h3{
+            color:#37474f;
+            margin-bottom:20px;
+        }
+
+        /* ================= FORM ================= */
+
+        .primary{
+            width:100%;
+
+            padding:13px;
+
+            border:none;
+
+            border-radius:9px;
+
+            background:#0f766e;
+            color:white;
+
+            font-weight:bold;
+
+            font-size:15px;
+        }
+
+        .primary:hover{
+            background:#115e59;
+        }
+
+        /* ================= TOKEN ================= */
+
+        .token-display{
+            text-align:center;
+
+            padding:28px;
+
+            background:
+                    linear-gradient(135deg,#e0f2f1,#e0f7fa);
+
+            border-radius:15px;
+
+            margin-bottom:20px;
+        }
+
+        .token-display p{
+            color:#607d8b;
+        }
+
+        .token-display h1{
+            font-size:58px;
+            color:#0f766e;
+
+            margin:10px;
+        }
+
+        /* ================= QUEUE ================= */
+
+        .queue-item{
+            display:flex;
+
+            justify-content:space-between;
+            align-items:center;
+
+            padding:15px;
+
+            background:#f7fafb;
+
+            border-left:4px solid #0f766e;
+
+            border-radius:9px;
+
+            margin-bottom:10px;
+        }
+
+        .token{
+            font-size:18px;
+
+            font-weight:bold;
+
+            color:#164e63;
+        }
+
+        .status{
+            padding:5px 10px;
+
+            border-radius:20px;
+
+            font-size:12px;
+
+            background:#fff3cd;
+
+            color:#856404;
+        }
+
+        .status.serving{
+            background:#dbeafe;
+            color:#1d4ed8;
+        }
+
+        .status.served{
+            background:#dcfce7;
+            color:#166534;
+        }
+
+        .status.skipped{
+            background:#fee2e2;
+            color:#991b1b;
+        }
+
+        .empty{
+            text-align:center;
+
+            color:#90a4ae;
+
+            padding:25px;
+        }
+
+        /* ================= STAFF ACTIONS ================= */
+
+        .staff-control-card{
+            border:2px solid #d1fae5;
+        }
+
+        .control-title{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:15px;
+        }
+
+        .control-title span{
+            padding:5px 10px;
+            background:#dcfce7;
+            color:#166534;
+            border-radius:20px;
+            font-size:11px;
+            font-weight:bold;
+        }
+
+        .actions{
+            display:grid;
+
+            grid-template-columns:repeat(4,1fr);
+
+            gap:10px;
+        }
+
+        .action{
+            border:none;
+
+            padding:13px 8px;
+
+            border-radius:9px;
+
+            font-weight:bold;
+        }
+
+        .action:hover{
+            transform:translateY(-1px);
+        }
+
+        .call{
+            background:#e0f2fe;
+            color:#0369a1;
+        }
+
+        .recall{
+            background:#ede9fe;
+            color:#6d28d9;
+        }
+
+        .serve{
+            background:#dcfce7;
+            color:#166534;
+        }
+
+        .skip{
+            background:#fff7ed;
+            color:#c2410c;
+        }
+
+        /* ================= ADMIN ================= */
+
+        .admin-grid{
+            display:grid;
+
+            grid-template-columns:repeat(2,1fr);
+
+            gap:22px;
+        }
+
+        .user-row{
+            display:flex;
+
+            justify-content:space-between;
+            align-items:center;
+
+            padding:13px;
+
+            border-bottom:1px solid #edf1f2;
+        }
+
+        .user-role{
+            font-size:12px;
+
+            padding:4px 9px;
+
+            border-radius:15px;
+
+            background:#e0f2f1;
+
+            color:#00695c;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width:950px){
+
+            .login-wrapper{
+                grid-template-columns:1fr;
+            }
+
+            .login-info{
+                display:none;
+            }
+
+            .stats{
+                grid-template-columns:repeat(2,1fr);
+            }
+
+            .grid-2,
+            .admin-grid{
+                grid-template-columns:1fr;
+            }
+        }
+
+        @media(max-width:700px){
+
+            .topbar{
+                padding:12px 15px;
+                flex-wrap:wrap;
+            }
+
+            .topbar-right{
+                width:100%;
+                justify-content:flex-end;
+            }
+
+            .greeting{
+                display:none;
+            }
+
+            .stats{
+                grid-template-columns:1fr;
+            }
+
+            .main{
+                padding:15px;
+            }
+
+            .date-time{
+                display:none;
+            }
+        }
+
+        @media(max-width:500px){
+
+            .actions{
+                grid-template-columns:1fr 1fr;
+            }
+
+            .notification-panel{
+                right:-80px;
+                width:290px;
+            }
+        }
+
+
+        /* =====================================================
+           TOKEN RECEIPT POPUP
+           ONLY ADDED FEATURE
+        ===================================================== */
+
+        .receipt-overlay{
+
+            display:none;
+
+            position:fixed;
+
+            inset:0;
+
+            background:rgba(0,0,0,.55);
+
+            z-index:9999;
+
+            align-items:center;
+
+            justify-content:center;
+
+            padding:20px;
+        }
+
+
+        .token-receipt{
+
+            width:360px;
+
+            max-width:100%;
+
+            background:white;
+
+            border-radius:17px;
+
+            padding:25px;
+
+            box-shadow:0 20px 60px rgba(0,0,0,.30);
+
+            text-align:center;
+        }
+
+
+        .receipt-header h2{
+
+            color:#164e63;
+
+            font-size:22px;
+
+            margin-bottom:5px;
+        }
+
+
+        .receipt-header p{
+
+            color:#78909c;
+
+            font-size:13px;
+        }
+
+
+        .receipt-line{
+
+            border-top:2px dashed #ccd8dc;
+
+            margin:18px 0;
+        }
+
+
+        .receipt-token{
+
+            padding:10px;
+
+            margin-bottom:10px;
+        }
+
+
+        .receipt-token span{
+
+            display:block;
+
+            color:#78909c;
+
+            font-size:13px;
+
+            margin-bottom:5px;
+        }
+
+
+        .receipt-token strong{
+
+            display:block;
+
+            font-size:38px;
+
+            color:#0f766e;
+        }
+
+
+        .receipt-row{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            gap:15px;
+
+            padding:9px 0;
+
+            border-bottom:1px solid #edf1f2;
+
+            text-align:left;
+        }
+
+
+        .receipt-row span{
+
+            color:#78909c;
+
+            font-size:13px;
+        }
+
+
+        .receipt-row strong{
+
+            color:#263238;
+
+            font-size:13px;
+
+            text-align:right;
+        }
+
+
+        .receipt-message{
+
+            color:#607d8b;
+
+            font-size:13px;
+
+            margin-bottom:18px;
+        }
+
+
+        .receipt-buttons{
+
+            display:flex;
+
+            gap:10px;
+        }
+
+
+        .receipt-buttons button{
+
+            flex:1;
+
+            padding:11px;
+
+            border:none;
+
+            border-radius:9px;
+
+            font-weight:bold;
+
+            font-size:14px;
+        }
+
+
+        .receipt-close{
+
+            background:#eceff1;
+
+            color:#455a64;
+
+            cursor:pointer;
+        }
+
+
+        .receipt-close:hover{
+
+            background:#cfd8dc;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+LOGIN PAGE
+===================================================== -->
+
+<section id="loginPage">
+
+    <div class="login-wrapper">
+
+        <div class="login-info">
+
+            <div class="logo-big">🎫</div>
+
+            <h1>
+                Digital Queue<br>
+                Management System
+            </h1>
+
+            <p>
+                A smart digital solution for efficient
+                queue and customer management.
+            </p>
+
+            <div class="features">
+
+                <div>✓ Secure User Login</div>
+                <div>✓ Digital Token Generation</div>
+                <div>✓ Real-Time Queue Management</div>
+                <div>✓ Role-Based Dashboard</div>
+                <div>✓ Notifications & Live Updates</div>
+
+            </div>
+
+        </div>
+
+
+        <div class="login-form">
+
+            <h2>Welcome Back 👋</h2>
+
+            <p class="subtitle">
+                Login to access your dashboard
+            </p>
+
+
+            <div class="input-box">
+
+                <label>Username</label>
+
+                <input
+                        type="text"
+                        id="loginUsername"
+                        placeholder="Enter username"
+                >
+
+            </div>
+
+
+            <div class="input-box">
+
+                <label>Password</label>
+
+                <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter password"
+                >
+
+            </div>
+
+
+            <div class="input-box">
+
+                <label>Login As</label>
+
+                <select id="loginRole">
+
+                    <option value="customer">
+                        Student / Customer
+                    </option>
+
+                    <option value="staff">
+                        Staff
+                    </option>
+
+                    <option value="admin">
+                        Administrator
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                    class="login-button"
+                    onclick="login()">
+
+                🔐 Login
+
+            </button>
+
+
+            <button
+                    class="register-button"
+                    onclick="openRegister()">
+
+                📝 Create Customer Account
+
+            </button>
+
+
+            <div
+                    id="loginMessage"
+                    class="login-message">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+REGISTER MODAL
+===================================================== -->
+
+<div id="registerModal" class="modal">
+
+    <div class="modal-content">
+
+        <button
+                class="close-modal"
+                onclick="closeRegister()">
+            ×
+        </button>
+
+        <h2>Create Customer Account</h2>
+
+
+        <div class="form-group">
+
+            <label>Full Name</label>
+
+            <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Enter your full name"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Username</label>
+
+            <input
+                    type="text"
+                    id="registerUsername"
+                    placeholder="Create username"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Create password"
+            >
+
+        </div>
+
+
+        <button
+                class="primary"
+                onclick="registerUser()">
+
+            Create Account
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+CUSTOMER DASHBOARD
+===================================================== -->
+
+<section id="customerDashboard" class="dashboard">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">🎫</div>
+
+            Digital Queue Management System
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="date-time">
+
+                <div class="live-time">00:00:00</div>
+
+                <small class="live-date">
+                    Loading...
+                </small>
+
+            </div>
+
+
+            <div
+                    class="notification-box"
+                    onclick="toggleNotifications()">
+
+                🔔
+
+                <span class="notification-count">0</span>
+
+                <div class="notification-panel">
+
+                    <div class="notification-title">
+                        Notifications
+                    </div>
+
+                    <div class="notification-list"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="user-info">
+
+            <span class="greeting">
+                Welcome!
+            </span>
+
+                <span class="role-badge">
+                Student / Customer
+            </span>
+
+                <button
+                        class="logout"
+                        onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main">
+
+        <div class="heading">
+
+            <h2>Customer Dashboard</h2>
+
+            <p>
+                Generate your token and monitor your queue.
+            </p>
+
+        </div>
+
+
+        <div class="grid-2">
+
+
+            <div class="card">
+
+                <h3>🎫 Generate Your Token</h3>
+
+
+                <div class="form-group">
+
+                    <label>Customer Name</label>
+
+                    <input
+                            type="text"
+                            id="customerName"
+                            placeholder="Enter your name"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Select Service</label>
+
+                    <select id="customerService">
+
+                        <option>
+                            General Service
+                        </option>
+
+                        <option>
+                            Customer Support
+                        </option>
+
+                        <option>
+                            Document Verification
+                        </option>
+
+                        <option>
+                            Payment Service
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                        class="primary"
+                        onclick="generateToken()">
+
+                    🎟 Generate Token
+
+                </button>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🎟 Your Token</h3>
+
+                <div class="token-display">
+
+                    <p>Your Current Token</p>
+
+                    <h1 id="myToken">---</h1>
+
+                    <p id="myTokenStatus">
+                        No token generated
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+                class="card"
+                style="margin-top:22px;">
+
+            <h3>📋 Current Queue</h3>
+
+            <div id="customerQueue"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+STAFF DASHBOARD
+===================================================== -->
+
+<section id="staffDashboard" class="dashboard">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">👨‍💼</div>
+
+            Digital Queue Management System
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="date-time">
+
+                <div class="live-time">00:00:00</div>
+
+                <small class="live-date">
+                    Loading...
+                </small>
+
+            </div>
+
+
+            <div
+                    class="notification-box"
+                    onclick="toggleNotifications()">
+
+                🔔
+
+                <span class="notification-count">0</span>
+
+                <div class="notification-panel">
+
+                    <div class="notification-title">
+                        Notifications
+                    </div>
+
+                    <div class="notification-list"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="user-info">
+
+            <span class="greeting">
+                Welcome!
+            </span>
+
+                <span class="role-badge">
+                Staff
+            </span>
+
+                <button
+                        class="logout"
+                        onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main">
+
+        <div class="heading">
+
+            <h2>Staff Dashboard</h2>
+
+            <p>
+                Manage and process the customer queue.
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="card stat">
+
+                <div class="stat-icon">🎫</div>
+
+                <div>
+
+                    <h3 id="staffTotal">0</h3>
+
+                    <p>Total Tokens</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">⏳</div>
+
+                <div>
+
+                    <h3 id="staffWaiting">0</h3>
+
+                    <p>Waiting</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">✅</div>
+
+                <div>
+
+                    <h3 id="staffServed">0</h3>
+
+                    <p>Served</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">📢</div>
+
+                <div>
+
+                    <h3 id="staffCurrent">---</h3>
+
+                    <p>Now Serving</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="grid-2">
+
+
+            <!-- STAFF CONTROL -->
+
+            <div class="card staff-control-card">
+
+                <div class="control-title">
+
+                    <h3>📢 Staff Control Panel</h3>
+
+                    <span>LIVE</span>
+
+                </div>
+
+
+                <div class="token-display">
+
+                    <p>NOW SERVING</p>
+
+                    <h1 id="staffCurrentToken">---</h1>
+
+                    <p>Counter 01</p>
+
+                </div>
+
+
+                <div class="actions">
+
+                    <button
+                            class="action call"
+                            onclick="callNext()">
+
+                        📢 Call Next
+
+                    </button>
+
+
+                    <button
+                            class="action recall"
+                            onclick="callAgain()">
+
+                        🔊 Call Again
+
+                    </button>
+
+
+                    <button
+                            class="action serve"
+                            onclick="serveCurrent()">
+
+                        ✅ Serve
+
+                    </button>
+
+
+                    <button
+                            class="action skip"
+                            onclick="skipCurrent()">
+
+                        ⏭️ Skip
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- LIVE QUEUE -->
+
+            <div class="card">
+
+                <h3>📋 Live Queue</h3>
+
+                <div id="staffQueue"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+ADMIN DASHBOARD
+===================================================== -->
+
+<section id="adminDashboard" class="dashboard">
+
+    <div class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">👑</div>
+
+            Digital Queue Management System
+
+        </div>
+
+
+        <div class="topbar-right">
+
+            <div class="date-time">
+
+                <div class="live-time">00:00:00</div>
+
+                <small class="live-date">
+                    Loading...
+                </small>
+
+            </div>
+
+
+            <div
+                    class="notification-box"
+                    onclick="toggleNotifications()">
+
+                🔔
+
+                <span class="notification-count">0</span>
+
+                <div class="notification-panel">
+
+                    <div class="notification-title">
+                        Notifications
+                    </div>
+
+                    <div class="notification-list"></div>
+
+                </div>
+
+            </div>
+
+
+            <div class="user-info">
+
+            <span class="greeting">
+                Welcome!
+            </span>
+
+                <span class="role-badge">
+                Administrator
+            </span>
+
+                <button
+                        class="logout"
+                        onclick="logout()">
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="main">
+
+        <div class="heading">
+
+            <h2>Administrator Dashboard</h2>
+
+            <p>
+                Complete system overview and management.
+            </p>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="card stat">
+
+                <div class="stat-icon">👥</div>
+
+                <div>
+
+                    <h3 id="adminUsers">0</h3>
+
+                    <p>Registered Users</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">🎫</div>
+
+                <div>
+
+                    <h3 id="adminTokens">0</h3>
+
+                    <p>Total Tokens</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">⏳</div>
+
+                <div>
+
+                    <h3 id="adminWaiting">0</h3>
+
+                    <p>Waiting</p>
+
+                </div>
+
+            </div>
+
+
+            <div class="card stat">
+
+                <div class="stat-icon">✅</div>
+
+                <div>
+
+                    <h3 id="adminServed">0</h3>
+
+                    <p>Served</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-grid">
+
+
+            <div class="card">
+
+                <h3>👥 System Users</h3>
+
+                <div id="userList"></div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>📋 Queue Overview</h3>
+
+                <div id="adminQueue"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+TOKEN RECEIPT POPUP
+===================================================== -->
+
+<div id="tokenReceiptOverlay" class="receipt-overlay">
+
+    <div class="token-receipt">
+
+        <div class="receipt-header">
+
+            <h2>🎫 TOKEN RECEIPT</h2>
+
+            <p>
+                Digital Queue Management System
+            </p>
+
+        </div>
+
+
+        <div class="receipt-line"></div>
+
+
+        <div class="receipt-token">
+
+            <span>
+                Token Number
+            </span>
+
+            <strong id="receiptToken">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-row">
+
+            <span>
+                Customer Name
+            </span>
+
+            <strong id="receiptName">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-row">
+
+            <span>
+                Service
+            </span>
+
+            <strong id="receiptService">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-row">
+
+            <span>
+                Status
+            </span>
+
+            <strong id="receiptStatus">
+                WAITING
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-row">
+
+            <span>
+                Date
+            </span>
+
+            <strong id="receiptDate">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-row">
+
+            <span>
+                Time
+            </span>
+
+            <strong id="receiptTime">
+                ---
+            </strong>
+
+        </div>
+
+
+        <div class="receipt-line"></div>
+
+
+        <p class="receipt-message">
+            Please wait for your turn.
+        </p>
+
+
+        <div class="receipt-buttons">
+
+            <button
+                    class="primary"
+                    onclick="printTokenReceipt()">
+
+                🖨 Print
+
+            </button>
+
+
+            <button
+                    class="receipt-close"
+                    onclick="closeTokenReceipt()">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       STAFF & ADMIN LOGIN DETAILS
+       CHANGE THESE IF YOU WANT
+    ===================================================== */
+
+    const STAFF_ACCOUNT = {
+
+        username: "staff",
+
+        password: "staff@123",
+
+        role: "staff",
+
+        name: "Queue Staff"
+
+    };
+
+
+    const ADMIN_ACCOUNT = {
+
+        username: "admin",
+
+        password: "admin@123",
+
+        role: "admin",
+
+        name: "System Administrator"
+
+    };
+
+
+    const fixedUsers = [
+
+        STAFF_ACCOUNT,
+
+        ADMIN_ACCOUNT
+
+    ];
+
+
+    /* =====================================================
+       CUSTOMER ACCOUNTS
+    ===================================================== */
+
+    function getCustomers(){
+
+        return JSON.parse(
+
+            localStorage.getItem("queueCustomers")
+
+        ) || [];
+
+    }
+
+
+    function saveCustomers(customers){
+
+        localStorage.setItem(
+
+            "queueCustomers",
+
+            JSON.stringify(customers)
+
+        );
+
+    }
+
+
+    /* =====================================================
+       QUEUE DATA
+    ===================================================== */
+
+    let queue =
+
+        JSON.parse(
+
+            localStorage.getItem("queueData")
+
+        ) || [];
+
+
+    let tokenNumber =
+
+        Number(
+
+            localStorage.getItem("queueTokenNumber")
+
+        ) || 0;
+
+
+    let served =
+
+        Number(
+
+            localStorage.getItem("queueServed")
+
+        ) || 0;
+
+
+    let currentToken =
+
+        JSON.parse(
+
+            localStorage.getItem("queueCurrentToken")
+
+        ) || null;
+
+
+    let loggedInUser = null;
+
+
+    let notifications = [];
+
+
+    /* =====================================================
+       SAVE SYSTEM DATA
+    ===================================================== */
+
+    function saveSystemData(){
+
+        localStorage.setItem(
+
+            "queueData",
+
+            JSON.stringify(queue)
+
+        );
+
+
+        localStorage.setItem(
+
+            "queueTokenNumber",
+
+            tokenNumber
+
+        );
+
+
+        localStorage.setItem(
+
+            "queueServed",
+
+            served
+
+        );
+
+
+        localStorage.setItem(
+
+            "queueCurrentToken",
+
+            JSON.stringify(currentToken)
+
+        );
+
+    }
+
+
+    /* =====================================================
+       REGISTER
+    ===================================================== */
+
+    function openRegister(){
+
+        document.getElementById(
+
+            "registerModal"
+
+        ).style.display="flex";
+
+    }
+
+
+    function closeRegister(){
+
+        document.getElementById(
+
+            "registerModal"
+
+        ).style.display="none";
+
+    }
+
+
+    function registerUser(){
+
+        const name =
+
+            document.getElementById(
+
+                "registerName"
+
+            ).value.trim();
+
+
+        const username =
+
+            document.getElementById(
+
+                "registerUsername"
+
+            ).value.trim();
+
+
+        const password =
+
+            document.getElementById(
+
+                "registerPassword"
+
+            ).value;
+
+
+        if(!name || !username || !password){
+
+            alert(
+
+                "Please fill all fields."
+
+            );
+
+            return;
+
+        }
+
+
+        if(username.length < 4){
+
+            alert(
+
+                "Username must contain at least 4 characters."
+
+            );
+
+            return;
+
+        }
+
+
+        if(password.length < 6){
+
+            alert(
+
+                "Password must contain at least 6 characters."
+
+            );
+
+            return;
+
+        }
+
+
+        const customers =
+
+            getCustomers();
+
+
+        const exists =
+
+            customers.some(function(user){
+
+                return user.username.toLowerCase()
+
+                    === username.toLowerCase();
+
+            });
+
+
+        const fixedExists =
+
+            fixedUsers.some(function(user){
+
+                return user.username.toLowerCase()
+
+                    === username.toLowerCase();
+
+            });
+
+
+        if(exists || fixedExists){
+
+            alert(
+
+                "Username already exists. Please choose another username."
+
+            );
+
+            return;
+
+        }
+
+
+        customers.push({
+
+            username:username,
+
+            password:password,
+
+            role:"customer",
+
+            name:name
+
+        });
+
+
+        saveCustomers(customers);
+
+
+        alert(
+
+            "Account created successfully!\n\n" +
+
+            "You can now login using your username and password."
+
+        );
+
+
+        document.getElementById(
+
+            "registerName"
+
+        ).value="";
+
+
+        document.getElementById(
+
+            "registerUsername"
+
+        ).value="";
+
+
+        document.getElementById(
+
+            "registerPassword"
+
+        ).value="";
+
+
+        closeRegister();
+
+
+        document.getElementById(
+
+            "loginUsername"
+
+        ).value=username;
+
+
+        document.getElementById(
+
+            "loginPassword"
+
+        ).value="";
+
+
+        document.getElementById(
+
+            "loginRole"
+
+        ).value="customer";
+
+    }
+
+
+    /* =====================================================
+       LOGIN
+    ===================================================== */
+
+    function login(){
+
+        const username =
+
+            document.getElementById(
+
+                "loginUsername"
+
+            ).value.trim();
+
+
+        const password =
+
+            document.getElementById(
+
+                "loginPassword"
+
+            ).value;
+
+
+        const role =
+
+            document.getElementById(
+
+                "loginRole"
+
+            ).value;
+
+
+        const message =
+
+            document.getElementById(
+
+                "loginMessage"
+
+            );
+
+
+        message.innerText="";
+
+        message.style.color="#c62828";
+
+
+        if(!username || !password){
+
+            message.innerText =
+
+                "Please enter username and password.";
+
+            return;
+
+        }
+
+
+        const allUsers =
+
+            fixedUsers.concat(
+
+                getCustomers()
+
+            );
+
+
+        const user =
+
+            allUsers.find(function(item){
+
+                return(
+
+                    item.username.toLowerCase()
+
+                    === username.toLowerCase() &&
+
+                    item.password === password &&
+
+                    item.role === role
+
+                );
+
+            });
+
+
+        if(!user){
+
+            message.innerText =
+
+                "Invalid username, password or selected role.";
+
+            return;
+
+        }
+
+
+        loggedInUser = user;
+
+
+        document.getElementById(
+
+            "loginPage"
+
+        ).style.display="none";
+
+
+        hideAllDashboards();
+
+
+        if(role==="customer"){
+
+            document.getElementById(
+
+                "customerDashboard"
+
+            ).style.display="block";
+
+        }
+
+
+        else if(role==="staff"){
+
+            document.getElementById(
+
+                "staffDashboard"
+
+            ).style.display="block";
+
+        }
+
+
+        else if(role==="admin"){
+
+            document.getElementById(
+
+                "adminDashboard"
+
+            ).style.display="block";
+
+        }
+
+
+        message.innerText="";
+
+
+        updateGreeting();
+
+        updateAll();
+
+
+        addNotification(
+
+            "Welcome back, " +
+
+            user.name +
+
+            "! Login successful."
+
+        );
+
+    }
+
+
+    /* =====================================================
+       HIDE DASHBOARDS
+    ===================================================== */
+
+    function hideAllDashboards(){
+
+        document
+
+            .querySelectorAll(".dashboard")
+
+            .forEach(function(dashboard){
+
+                dashboard.style.display="none";
+
+            });
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    function logout(){
+
+        hideAllDashboards();
+
+
+        document.getElementById(
+
+            "loginPage"
+
+        ).style.display="flex";
+
+
+        document.getElementById(
+
+            "loginUsername"
+
+        ).value="";
+
+
+        document.getElementById(
+
+            "loginPassword"
+
+        ).value="";
+
+
+        document.getElementById(
+
+            "loginMessage"
+
+        ).innerText="";
+
+
+        loggedInUser=null;
+
+    }
+
+
+    /* =====================================================
+       GREETING
+    ===================================================== */
+
+    function getGreeting(){
+
+        const hour =
+
+            new Date().getHours();
+
+
+        if(hour<12)
+
+            return "Good Morning";
+
+
+        if(hour<17)
+
+            return "Good Afternoon";
+
+
+        if(hour<21)
+
+            return "Good Evening";
+
+
+        return "Good Night";
+
+    }
+
+
+    function updateGreeting(){
+
+        if(!loggedInUser)
+
+            return;
+
+
+        const text =
+
+            getGreeting() +
+
+            ", " +
+
+            loggedInUser.name +
+
+            "! 👋";
+
+
+        document
+
+            .querySelectorAll(".greeting")
+
+            .forEach(function(element){
+
+                element.innerText=text;
+
+            });
+
+    }
+
+
+    /* =====================================================
+       LIVE TIME
+    ===================================================== */
+
+    function updateDateTime(){
+
+        const now=new Date();
+
+
+        let hours=now.getHours();
+
+
+        const minutes=
+
+            String(now.getMinutes())
+
+                .padStart(2,"0");
+
+
+        const seconds=
+
+            String(now.getSeconds())
+
+                .padStart(2,"0");
+
+
+        const ampm=
+
+            hours>=12 ? "PM":"AM";
+
+
+        let displayHour=
+
+            hours%12;
+
+
+        if(displayHour===0)
+
+            displayHour=12;
+
+
+        const timeText=
+
+            displayHour+
+
+            ":"+
+
+            minutes+
+
+            ":"+
+
+            seconds+
+
+            " "+
+
+            ampm;
+
+
+        const dateText=
+
+            now.toLocaleDateString(
+
+                "en-IN",
+
+                {
+
+                    weekday:"long",
+
+                    day:"numeric",
+
+                    month:"long",
+
+                    year:"numeric"
+
+                }
+
+            );
+
+
+        document
+
+            .querySelectorAll(".live-time")
+
+            .forEach(function(element){
+
+                element.innerText=timeText;
+
+            });
+
+
+        document
+
+            .querySelectorAll(".live-date")
+
+            .forEach(function(element){
+
+                element.innerText=dateText;
+
+            });
+
+
+        updateGreeting();
+
+    }
+
+
+    setInterval(
+
+        updateDateTime,
+
+        1000
+
+    );
+
+
+    updateDateTime();
+
+
+    /* =====================================================
+       NOTIFICATIONS
+    ===================================================== */
+
+    function addNotification(message){
+
+        notifications.unshift({
+
+            message:message,
+
+            time:new Date()
+
+        });
+
+
+        if(notifications.length>10){
+
+            notifications=
+
+                notifications.slice(0,10);
+
+        }
+
+
+        updateNotifications();
+
+    }
+
+
+    function updateNotifications(){
+
+        document
+
+            .querySelectorAll(".notification-count")
+
+            .forEach(function(element){
+
+                element.innerText=
+
+                    notifications.length;
+
+            });
+
+
+        document
+
+            .querySelectorAll(".notification-list")
+
+            .forEach(function(list){
+
+                if(notifications.length===0){
+
+                    list.innerHTML=
+
+                        `<div class="no-notification">
+
+                No new notifications
+
+             </div>`;
+
+                    return;
+
+                }
+
+
+                list.innerHTML="";
+
+
+                notifications
+
+                    .slice(0,6)
+
+                    .forEach(function(item){
+
+                        const time=
+
+                            item.time.toLocaleTimeString(
+
+                                "en-IN",
+
+                                {
+
+                                    hour:"2-digit",
+
+                                    minute:"2-digit"
+
+                                }
+
+                            );
+
+
+                        list.innerHTML+=
+
+                            `
+
+            <div class="notification">
+
+                🔔 ${item.message}
+
+                <br>
+
+                <small>${time}</small>
+
+            </div>
+
+            `;
+
+                    });
+
+            });
+
+    }
+
+
+    function toggleNotifications(){
+
+        document
+
+            .querySelectorAll(".notification-panel")
+
+            .forEach(function(panel){
+
+                panel.style.display=
+
+                    panel.style.display==="block"
+
+                        ? "none"
+
+                        : "block";
+
+            });
+
+    }
+
+
+    /* =====================================================
+       GENERATE TOKEN
+    ===================================================== */
+
+    function generateToken(){
+
+        if(!loggedInUser){
+
+            alert("Please login first.");
+
+            return;
+
+        }
+
+
+        const name=
+
+            document.getElementById(
+
+                "customerName"
+
+            ).value.trim();
+
+
+        const service=
+
+            document.getElementById(
+
+                "customerService"
+
+            ).value;
+
+
+        if(!name){
+
+            alert(
+
+                "Please enter your name."
+
+            );
+
+            return;
+
+        }
+
+
+        tokenNumber++;
+
+
+        const createdAt=new Date();
+
+
+        const token=
+
+            "A-"+
+
+            String(tokenNumber)
+
+                .padStart(3,"0");
+
+
+        const newToken={
+
+            token:token,
+
+            name:name,
+
+            service:service,
+
+            status:"Waiting",
+
+            owner:loggedInUser.username,
+
+            createdAt:createdAt.toISOString()
+
+        };
+
+
+        queue.push(newToken);
+
+
+        document.getElementById(
+
+            "myToken"
+
+        ).innerText=token;
+
+
+        document.getElementById(
+
+            "myTokenStatus"
+
+        ).innerText=
+
+            "Waiting for your turn";
+
+
+        document.getElementById(
+
+            "customerName"
+
+        ).value="";
+
+
+        saveSystemData();
+
+
+        addNotification(
+
+            "Token "+token+
+
+            " has been generated successfully."
+
+        );
+
+
+        updateAll();
+
+
+        /* SHOW RECEIPT */
+
+        showTokenReceipt(newToken);
+
+    }
+
+
+    /* =====================================================
+       TOKEN RECEIPT
+    ===================================================== */
+
+    function showTokenReceipt(tokenData){
+
+        const createdDate=
+
+            new Date(tokenData.createdAt);
+
+
+        const dateText=
+
+            createdDate.toLocaleDateString(
+
+                "en-IN",
+
+                {
+
+                    day:"numeric",
+
+                    month:"long",
+
+                    year:"numeric"
+
+                }
+
+            );
+
+
+        const timeText=
+
+            createdDate.toLocaleTimeString(
+
+                "en-IN",
+
+                {
+
+                    hour:"2-digit",
+
+                    minute:"2-digit",
+
+                    second:"2-digit"
+
+                }
+
+            );
+
+
+        document.getElementById(
+
+            "receiptToken"
+
+        ).innerText=
+
+            tokenData.token;
+
+
+        document.getElementById(
+
+            "receiptName"
+
+        ).innerText=
+
+            tokenData.name;
+
+
+        document.getElementById(
+
+            "receiptService"
+
+        ).innerText=
+
+            tokenData.service;
+
+
+        document.getElementById(
+
+            "receiptStatus"
+
+        ).innerText=
+
+            tokenData.status.toUpperCase();
+
+
+        document.getElementById(
+
+            "receiptDate"
+
+        ).innerText=
+
+            dateText;
+
+
+        document.getElementById(
+
+            "receiptTime"
+
+        ).innerText=
+
+            timeText;
+
+
+        document.getElementById(
+
+            "tokenReceiptOverlay"
+
+        ).style.display="flex";
+
+    }
+
+
+    /* =====================================================
+       CLOSE TOKEN RECEIPT
+    ===================================================== */
+
+    function closeTokenReceipt(){
+
+        document.getElementById(
+
+            "tokenReceiptOverlay"
+
+        ).style.display="none";
+
+    }
+
+
+    /* =====================================================
+       PRINT TOKEN RECEIPT
+    ===================================================== */
+
+    function printTokenReceipt(){
+
+        const token=
+
+            document.getElementById(
+
+                "receiptToken"
+
+            ).innerText;
+
+
+        const name=
+
+            document.getElementById(
+
+                "receiptName"
+
+            ).innerText;
+
+
+        const service=
+
+            document.getElementById(
+
+                "receiptService"
+
+            ).innerText;
+
+
+        const status=
+
+            document.getElementById(
+
+                "receiptStatus"
+
+            ).innerText;
+
+
+        const date=
+
+            document.getElementById(
+
+                "receiptDate"
+
+            ).innerText;
+
+
+        const time=
+
+            document.getElementById(
+
+                "receiptTime"
+
+            ).innerText;
+
+
+        const printWindow=
+
+            window.open(
+
+                "",
+
+                "_blank",
+
+                "width=450,height=700"
+
+            );
+
+
+        if(!printWindow){
+
+            alert(
+
+                "Please allow popups to print the receipt."
+
+            );
+
+            return;
+
+        }
+
+
+        printWindow.document.write(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Token Receipt</title>
+
+<style>
+
+body{
+
+    margin:0;
+
+    padding:30px;
+
+    font-family:Arial,sans-serif;
+
+    background:white;
+
+}
+
+.receipt{
+
+    width:320px;
+
+    margin:auto;
+
+    padding:22px;
+
+    border:1px solid #ddd;
+
+    text-align:center;
+
+}
+
+h2{
+
+    color:#164e63;
+
+    margin-bottom:5px;
+
+}
+
+.sub{
+
+    color:#64748b;
+
+    font-size:12px;
+
+}
+
+.line{
+
+    border-top:2px dashed #999;
+
+    margin:17px 0;
+
+}
+
+.token{
+
+    font-size:34px;
+
+    font-weight:bold;
+
+    color:#0f766e;
+
+    margin:15px 0;
+
+}
+
+.row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    padding:8px 0;
+
+    border-bottom:1px solid #eee;
+
+    text-align:left;
+
+    font-size:13px;
+
+}
+
+.message{
+
+    color:#64748b;
+
+    font-size:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="receipt">
+
+    <h2>🎫 TOKEN RECEIPT</h2>
+
+    <div class="sub">
+
+        Digital Queue Management System
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="token">
+
+        ${token}
+
+    </div>
+
+    <div class="row">
+
+        <span>Customer</span>
+
+        <strong>${name}</strong>
+
+    </div>
+
+    <div class="row">
+
+        <span>Service</span>
+
+        <strong>${service}</strong>
+
+    </div>
+
+    <div class="row">
+
+        <span>Status</span>
+
+        <strong>${status}</strong>
+
+    </div>
+
+    <div class="row">
+
+        <span>Date</span>
+
+        <strong>${date}</strong>
+
+    </div>
+
+    <div class="row">
+
+        <span>Time</span>
+
+        <strong>${time}</strong>
+
+    </div>
+
+    <div class="line"></div>
+
+    <div class="message">
+
+        Please wait for your turn.
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
+`);
+
+
+        printWindow.document.close();
+
+
+        printWindow.focus();
+
+
+        setTimeout(function(){
+
+            printWindow.print();
+
+            printWindow.close();
+
+        },300);
+
+    }
+
+
+    /* =====================================================
+       CALL NEXT
+    ===================================================== */
+
+    function callNext(){
+
+        if(currentToken!==null){
+
+            alert(
+
+                "Please Serve or Skip the current token first."
+
+            );
+
+            return;
+
+        }
+
+
+        if(queue.length===0){
+
+            alert(
+
+                "No customers are waiting."
+
+            );
+
+            return;
+
+        }
+
+
+        currentToken=
+
+            queue.shift();
+
+
+        currentToken.status=
+
+            "Serving";
+
+
+        saveSystemData();
+
+
+        addNotification(
+
+            "Token "+
+
+            currentToken.token+
+
+            " is now being served at Counter 01."
+
+        );
+
+
+        updateAll();
+
+
+        alert(
+
+            "📢 NOW SERVING\n\n"+
+
+            currentToken.token+
+
+            "\n\nCounter 01"
+
+        );
+
+    }
+
+
+    /* =====================================================
+       CALL AGAIN
+    ===================================================== */
+
+    function callAgain(){
+
+        if(currentToken===null){
+
+            alert(
+
+                "There is no active token to call."
+
+            );
+
+            return;
+
+        }
+
+
+        addNotification(
+
+            "Token "+
+
+            currentToken.token+
+
+            " has been called again at Counter 01."
+
+        );
+
+
+        alert(
+
+            "🔊 Calling Token "+
+
+            currentToken.token+
+
+            " again.\n\nCounter 01"
+
+        );
+
+    }
+
+
+    /* =====================================================
+       SERVE
+    ===================================================== */
+
+    function serveCurrent(){
+
+        if(currentToken===null){
+
+            alert(
+
+                "There is no active token."
+
+            );
+
+            return;
+
+        }
+
+
+        const completedToken=
+
+            currentToken.token;
+
+
+        served++;
+
+
+        currentToken.status=
+
+            "Served";
+
+
+        addNotification(
+
+            completedToken+
+
+            " has been successfully served."
+
+        );
+
+
+        currentToken=null;
+
+
+        saveSystemData();
+
+
+        updateAll();
+
+
+        alert(
+
+            completedToken+
+
+            " has been served successfully."
+
+        );
+
+    }
+
+
+    /* =====================================================
+       SKIP
+    ===================================================== */
+
+    function skipCurrent(){
+
+        if(currentToken===null){
+
+            alert(
+
+                "There is no active token."
+
+            );
+
+            return;
+
+        }
+
+
+        const skippedToken=
+
+            currentToken.token;
+
+
+        addNotification(
+
+            skippedToken+
+
+            " has been skipped."
+
+        );
+
+
+        currentToken=null;
+
+
+        saveSystemData();
+
+
+        updateAll();
+
+
+        alert(
+
+            skippedToken+
+
+            " has been skipped."
+
+        );
+
+    }
+
+
+    /* =====================================================
+       UPDATE EVERYTHING
+    ===================================================== */
+
+    function updateAll(){
+
+        updateCustomerQueue();
+
+        updateStaffDashboard();
+
+        updateAdminDashboard();
+
+        updateNotifications();
+
+    }
+
+
+    /* =====================================================
+       CUSTOMER QUEUE
+    ===================================================== */
+
+    function updateCustomerQueue(){
+
+        const container=
+
+            document.getElementById(
+
+                "customerQueue"
+
+            );
+
+
+        if(!container)
+
+            return;
+
+
+        container.innerHTML="";
+
+
+        const myWaitingTokens=
+
+            queue.filter(function(item){
+
+                return item.owner===
+
+                    (loggedInUser
+
+                        ? loggedInUser.username
+
+                        : "");
+
+            });
+
+
+        if(myWaitingTokens.length===0){
+
+            container.innerHTML=
+
+                `<div class="empty">
+
+            No customers waiting.
+
+         </div>`;
+
+            return;
+
+        }
+
+
+        myWaitingTokens.forEach(function(item){
+
+            container.innerHTML+=
+
+                `
+
+        <div class="queue-item">
+
+            <div>
+
+                <div class="token">
+
+                    ${item.token}
+
+                </div>
+
+                <small>
+
+                    ${item.service}
+
+                </small>
+
+            </div>
+
+            <span class="status">
+
+                ${item.status}
+
+            </span>
+
+        </div>
+
+        `;
+
+        });
+
+    }
+
+
+    /* =====================================================
+       STAFF DASHBOARD
+    ===================================================== */
+
+    function updateStaffDashboard(){
+
+        const queueContainer=
+
+            document.getElementById(
+
+                "staffQueue"
+
+            );
+
+
+        if(!queueContainer)
+
+            return;
+
+
+        document.getElementById(
+
+            "staffTotal"
+
+        ).innerText=
+
+            tokenNumber;
+
+
+        document.getElementById(
+
+            "staffWaiting"
+
+        ).innerText=
+
+            queue.length;
+
+
+        document.getElementById(
+
+            "staffServed"
+
+        ).innerText=
+
+            served;
+
+
+        document.getElementById(
+
+            "staffCurrent"
+
+        ).innerText=
+
+            currentToken
+
+                ? currentToken.token
+
+                : "---";
+
+
+        document.getElementById(
+
+            "staffCurrentToken"
+
+        ).innerText=
+
+            currentToken
+
+                ? currentToken.token
+
+                : "---";
+
+
+        queueContainer.innerHTML="";
+
+
+        if(queue.length===0){
+
+            queueContainer.innerHTML=
+
+                `<div class="empty">
+
+            Queue is empty.
+
+         </div>`;
+
+            return;
+
+        }
+
+
+        queue.forEach(function(item){
+
+            queueContainer.innerHTML+=
+
+                `
+
+        <div class="queue-item">
+
+            <div>
+
+                <div class="token">
+
+                    ${item.token}
+
+                </div>
+
+                <small>
+
+                    ${item.name}
+
+                    -
+
+                    ${item.service}
+
+                </small>
+
+            </div>
+
+            <span class="status">
+
+                ${item.status}
+
+            </span>
+
+        </div>
+
+        `;
+
+        });
+
+    }
+
+
+    /* =====================================================
+       ADMIN DASHBOARD
+    ===================================================== */
+
+    function updateAdminDashboard(){
+
+        const queueContainer=
+
+            document.getElementById(
+
+                "adminQueue"
+
+            );
+
+
+        if(!queueContainer)
+
+            return;
+
+
+        const customers=
+
+            getCustomers();
+
+
+        document.getElementById(
+
+            "adminUsers"
+
+        ).innerText=
+
+            customers.length+
+
+            fixedUsers.length;
+
+
+        document.getElementById(
+
+            "adminTokens"
+
+        ).innerText=
+
+            tokenNumber;
+
+
+        document.getElementById(
+
+            "adminWaiting"
+
+        ).innerText=
+
+            queue.length;
+
+
+        document.getElementById(
+
+            "adminServed"
+
+        ).innerText=
+
+            served;
+
+
+        /* USERS */
+
+        const userList=
+
+            document.getElementById(
+
+                "userList"
+
+            );
+
+
+        userList.innerHTML="";
+
+
+        fixedUsers
+
+            .concat(customers)
+
+            .forEach(function(user){
+
+                const roleName=
+
+                    user.role==="admin"
+
+                        ? "Administrator"
+
+                        : user.role==="staff"
+
+                            ? "Staff"
+
+                            : "Customer";
+
+
+                userList.innerHTML+=
+
+                    `
+
+        <div class="user-row">
+
+            <span>
+
+                ${user.username}
+
+            </span>
+
+            <span class="user-role">
+
+                ${roleName}
+
+            </span>
+
+        </div>
+
+        `;
+
+            });
+
+
+        /* QUEUE */
+
+        queueContainer.innerHTML="";
+
+
+        if(queue.length===0){
+
+            queueContainer.innerHTML=
+
+                `<div class="empty">
+
+            No waiting tokens.
+
+         </div>`;
+
+            return;
+
+        }
+
+
+        queue.forEach(function(item){
+
+            queueContainer.innerHTML+=
+
+                `
+
+        <div class="queue-item">
+
+            <div>
+
+                <div class="token">
+
+                    ${item.token}
+
+                </div>
+
+                <small>
+
+                    ${item.name}
+
+                </small>
+
+            </div>
+
+            <span class="status">
+
+                ${item.status}
+
+            </span>
+
+        </div>
+
+        `;
+
+        });
+
+    }
+
+
+    /* =====================================================
+       INITIAL LOAD
+    ===================================================== */
+
+    updateAll();
+
+</script>
+
+</body>
+
+</html>
